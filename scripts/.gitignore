@@ -1,11 +1,2 @@
-# Secret files
+# scriptsディレクトリ内の秘密情報を守るための設定
 .env
-# OS generated files
-.DS_Store
-# Python caches
-__pycache__/
-*.py[cod]
-*$py.class
-# Log files
-*.log
-log/

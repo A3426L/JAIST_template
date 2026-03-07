@@ -1,0 +1,12 @@
+# OS generated files
+.DS_Store
+
+# Local logs & artifacts
+log/
+*.log
+*.o[0-9]*
+*.e[0-9]*
+
+# Python
+__pycache__/
+.venv/
