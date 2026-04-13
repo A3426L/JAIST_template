@@ -1,14 +1,17 @@
 #!/bin/bash
-#PBS -N Dual_Emp_Train
-#PBS -q GPU-1
-#PBS -l select=1:ncpus=4:mem=16gb:ngpus=1
-#PBS -j oe
-#PBS -o log/
+#SBATCH --job-name=Dual_Emp_Train
+#SBATCH --partition=GPU-1
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=16G
+#SBATCH --gres=gpu:1
+#SBATCH --output=%j.out
 
 # --------------------------------------------------------------------------
 # 環境設定
 # --------------------------------------------------------------------------
-cd "$PBS_O_WORKDIR"
+cd "$SLURM_SUBMIT_DIR"
 
 # ログ用ディレクトリを念のため作成
 mkdir -p log
@@ -24,9 +27,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # 環境の同期（pyproject.toml に基づいて依存パッケージをインストール）
 uv sync
 
-# --- 設定: 実行したいコマンドをここに書く ---
-CMD="uv run python -m src.evaluate --checkpoint checkpoints/run_20260401_2219/best_model.pt --top_p 0.9 --device cuda"
-# ----------------------------------------
+CMD_EVAL="uv run python -m src.run_all --eval_only --checkpoint checkpoints/run_20260410_1653/best_model.pt --max_gen_len 30 --device cuda"
 
 echo "Job Start at: $(date)"
 
@@ -34,8 +35,9 @@ echo "Job Start at: $(date)"
 # --------------------------------------------------------------------------
 # プログラムの実行
 # --------------------------------------------------------------------------
-echo ">>> Running: ${CMD}"
-${CMD}
+# Issue #22: 評価のみ（学習・label_emotions.py は不要）
+echo ">>> Running: ${CMD_EVAL}"
+${CMD_EVAL}
 EXIT_CODE=$?
 
 echo "Job End at: $(date)"
@@ -43,6 +45,6 @@ echo "Job End at: $(date)"
 # --------------------------------------------------------------------------
 # Discord通知の送信
 # --------------------------------------------------------------------------
-NOTIFY="./scripts/kagayaki/notify.sh"
+NOTIFY="./scripts/hakusan/notify.sh"
 chmod +x "${NOTIFY}"
-"${NOTIFY}" $EXIT_CODE "$CMD"
+"${NOTIFY}" $EXIT_CODE "$CMD_EVAL"

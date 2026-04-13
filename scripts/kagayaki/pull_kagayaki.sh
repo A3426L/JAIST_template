@@ -30,7 +30,7 @@ fi
 
 echo ">>> KAGAYAKIからファイルをローカルに同期（Pull）しています... [${REMOTE_DIR}]"
 
-# --delete を追加し、リモートにないファイルはローカルからも削除する
-rsync -avzu --delete ${DRY_RUN_FLAG} "${EXCLUDES[@]}" "${REMOTE_HOST}:${REMOTE_DIR}/" "$(dirname "$0")/../../"
+# -u: ローカルが新しい場合は上書きしない / --delete なし: ローカルのファイルは削除しない
+rsync -avzu ${DRY_RUN_FLAG} "${EXCLUDES[@]}" "${REMOTE_HOST}:${REMOTE_DIR}/" "$(dirname "$0")/../../"
 
 echo ">>> 完了しました。"

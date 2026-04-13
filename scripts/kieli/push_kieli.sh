@@ -18,7 +18,8 @@ PROJECT_NAME=$(basename "$(cd "$(dirname "$0")/../.." && pwd)")
 REMOTE_DIR="~/${PROJECT_NAME}"
 
 # 同期から除外
-EXCLUDES=("--exclude=.git" "--exclude=__pycache__" "--exclude=.venv" "--exclude=.vscode" "--exclude=.DS_Store")
+# data/ checkpoints/ log/ はリモートで生成されるため --delete の対象から外す
+EXCLUDES=("--exclude=.git" "--exclude=__pycache__" "--exclude=.venv" "--exclude=.vscode" "--exclude=.DS_Store" "--exclude=data/" "--exclude=checkpoints/" "--exclude=log/")
 
 set -e
 

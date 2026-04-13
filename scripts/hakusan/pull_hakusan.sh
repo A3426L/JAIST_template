@@ -1,6 +1,6 @@
 #!/bin/bash
 # ---------------------------------------------------------
-# KIELI (Ubuntu) 同期・成果物取得スクリプト
+# HAKUSAN 同期・成果物取得スクリプト
 # ---------------------------------------------------------
 
 # 同じ scripts フォルダ内の .env から設定を読み込む
@@ -10,7 +10,7 @@ if [ -f "$ENV_FILE" ]; then
 fi
 
 # デフォルト設定
-REMOTE_HOST="${KIELI_HOST:-kieli}"
+REMOTE_HOST="${HAKUSAN_HOST:-hakusan}"
 
 # プロジェクトのディレクトリ名を自動取得
 PROJECT_NAME=$(basename "$(cd "$(dirname "$0")/../.." && pwd)")
@@ -28,9 +28,8 @@ if [[ "$*" == *"--dry-run"* ]]; then
     echo "!!! DRY-RUN MODE: 実際には同期されません。同期対象の確認のみ行います。 !!!"
 fi
 
-echo ">>> KIELI (Ubuntu) からファイルをローカルに同期（Pull）しています... [${REMOTE_DIR}]"
+echo ">>> HAKUSANからファイルをローカルに同期（Pull）しています... [${REMOTE_DIR}]"
 
-# -u: ローカルが新しい場合は上書きしない / --delete なし: ローカルのファイルは削除しない
 rsync -avzu ${DRY_RUN_FLAG} "${EXCLUDES[@]}" "${REMOTE_HOST}:${REMOTE_DIR}/" "$(dirname "$0")/../../"
 
 echo ">>> 完了しました。"
